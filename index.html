@@ -44,6 +44,8 @@
 
 		// paint when we recieve a frame
 		socket.on("frame", function(lines) {
+			console.log(lines);
+
 			// get audio information
 			var audioData = audioAnalyser.getByteFrequencyData();
 
