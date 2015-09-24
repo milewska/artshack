@@ -25,7 +25,7 @@
 		<canvas id="canvas4"></canvas>
 		<div style="clear: both"></div>
 
-		<!-- <button onclick="saveImage();">Download Image</button> -->
+		<!-- <button onclick="dostuff();">Start</button> -->
 
 		<script>
 		// connect via websockets
@@ -64,11 +64,44 @@
 						else ctx.lineTo(pt[0], pt[1]);
 					});
 
-					ctx.lineWidth = audioAnalyser.getMid() + 'px';
+					ctx.lineWidth = (Math.floor(audioAnalyser.getMid() * 5) + 1) + 'px';
 					ctx.stroke();
 				});
 			});
 		});
+
+		// function onFrame() {
+		// 	// var audioData = audioAnalyser.getByteFrequencyData();
+		//
+		// 	canvases.forEach(function(canvas, i) {
+		// 		// grab the context
+		// 		var ctx = canvas.getContext("2d");
+		// 		ctx.clearRect(0, 0, size.width, size.height);
+		//
+		// 		// fill with color
+		// 		ctx.globalAlpha = audioAnalyser.getMid();
+		// 		ctx.fillStyle = bgcolors[i];
+		// 		ctx.fillRect(0, 0, size.width, size.height);
+		//
+		// 		// // write the lines
+		// 		// lines.forEach(function(points) {
+		// 		// 	points.forEach(function(pt, index) {
+		// 		// 		if (!index) ctx.moveTo(pt[0], pt[1]);
+		// 		// 		else ctx.lineTo(pt[0], pt[1]);
+		// 		// 	});
+		// 		//
+		// 		// 	ctx.lineWidth = audioAnalyser.getMid() + 'px';
+		// 		// 	ctx.stroke();
+		// 		// });
+		// 	});
+		// }
+		//
+		// function dostuff() {
+		// 	requestAnimationFrame(function() {
+		// 		onFrame();
+		// 		dostuff();
+		// 	});
+		// }
 
 		// // downloads the canvas as a pngs
 		// function saveImage() {

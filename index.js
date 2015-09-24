@@ -6,7 +6,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "5000kb" }));
 app.use(express.static(__dirname + "/public"));
 
 app.get("/", function(req, res, next) {
