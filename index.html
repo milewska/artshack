@@ -60,8 +60,8 @@
 				// write the lines
 				lines.forEach(function(points) {
 					points.forEach(function(pt, index) {
-						if (!index) ctx.moveTo(pt[0], pt[1]);
-						else ctx.lineTo(pt[0], pt[1]);
+						if (!index) ctx.moveTo(pt.x, pt.y);
+						else ctx.lineTo(pt.x, pt.y);
 					});
 
 					ctx.lineWidth = (Math.floor(audioAnalyser.getMid() * 5) + 1) + 'px';
