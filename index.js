@@ -1,9 +1,7 @@
 var _ = require("underscore");
 var express = require("express");
 var bodyParser = require("body-parser");
-var level = require('level');
 
-var db = level('./frames');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -24,6 +22,6 @@ app.post("/frame", function(req, res, next) {
 	res.send({ ok: true });
 });
 
-server.listen(3000, function() {
+server.listen(process.env.PORT || 3000, function() {
 	console.log("ready");
 });
