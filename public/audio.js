@@ -35,6 +35,10 @@ function setUpAudio(e){
   audioAnalyser = new AudioAnalyser();
 
   isSetup = true;
+
+  function draw(){
+
+  }
 }
 
 function AudioAnalyser(){}
