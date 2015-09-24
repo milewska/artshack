@@ -1,16 +1,19 @@
 package org.opencv.samples.imagemanipulations;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -19,6 +22,9 @@ import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.imgproc.Imgproc;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -214,7 +220,39 @@ public class ImageManipulationsActivity extends Activity implements CvCameraView
         int height = rows * 3 / 4;
 
         //hardcode to canny
-        ImageManipulationsActivity.viewMode = ImageManipulationsActivity.VIEW_MODE_CANNY;
+//        ImageManipulationsActivity.viewMode = ImageManipulationsActivity.View;
+        
+        
+        if(true){
+//        	http://answers.opencv.org/question/40252/getting-outermost-contour-using-findcontours/
+        	rgbaInnerWindow = rgba.submat(top, top + height, left, left + width);
+            Imgproc.Canny(rgbaInnerWindow, mIntermediateMat, 80, 90);
+            Imgproc.cvtColor(mIntermediateMat, rgbaInnerWindow, Imgproc.COLOR_GRAY2BGRA, 4);
+            rgbaInnerWindow.release();
+        	
+            
+            Intent upload = new Intent(this, UploadIntentService.class);
+            startService(upload);
+//            Bitmap bm = inputFrame.;
+//            int iCannyLowerThreshold = 60, iCannyUpperThreshold = 100;      
+//            Mat m = new Mat(bm.getWidth(), bm.getHeight(), CvType.CV_8UC1);
+//            Utils.bitmapToMat(bm, m);
+//            Mat thr = new Mat(m.rows(),m.cols(),CvType.CV_8UC1); 
+//            Mat dst = new Mat(m.rows(), m.cols(), CvType.CV_8UC1, Scalar.all(0));
+//            Imgproc.cvtColor(m, thr, Imgproc.COLOR_BGR2GRAY);
+//            Imgproc.threshold(thr, thr, 100, 255, Imgproc.THRESH_BINARY);        
+//            Imgproc.Canny(thr, thr, iCannyLowerThreshold, iCannyUpperThreshold);
+//            List<MatOfPoint> contours;
+//			//Imgproc.findContours(m, contours, new Mat(), 0, 1);
+//            Imgproc.findContours( thr, contours, new Mat(),Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0,0) );
+//            Scalar color = new Scalar( 255,255,255);
+//            Imgproc.drawContours(dst, contours, -1, color, 3);    
+//            //Core.rectangle(m, bounding_rect.br(), bounding_rect.tl(), new Scalar(0,255,0));
+//
+//
+//            Utils.matToBitmap(dst,bm);
+        	return rgba;
+        }
         
         switch (ImageManipulationsActivity.viewMode) {
         case ImageManipulationsActivity.VIEW_MODE_RGBA:
