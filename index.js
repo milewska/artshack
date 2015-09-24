@@ -1,6 +1,8 @@
 var express = require("express");
 var bodyParser = require("body-parser");
+var level = require('level');
 
+var db = level('./frames');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
