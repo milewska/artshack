@@ -12,8 +12,8 @@ app.get("/", function(req, res, next) {
 	res.sendFile(__dirname + "/index.html");
 });
 
-app.post("/contours", function(req, res, next) {
-	io.emit('contour', req.body);
+app.post("/frame", function(req, res, next) {
+	io.emit('frame', req.body);
 	res.send({ ok: true });
 });
 
