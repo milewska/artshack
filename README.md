@@ -15,13 +15,13 @@ npm start
 The client side uses Android and a sample OpenCV project we tweeked to extact the edges as vectors of points.
 
 1. Download a GSON jar (gson-2.2.4.jar)
-1. Place it in 	`android/ArtsHack/libs`
-1. Open Eclipse ADT (opencv doesnt work well in Android studio yet)
+1. Place it in 	`android/ArtsHack/app/libs`
+1. Open Eclipse ADT (sorry, opencv doesnt work well in Android studio yet)
 1. Download Android OpenCV SDK
 1. File Import > Existing Android project
 1. Choose the `OpenCV-android-sdk/sdk/` directory
 1. File Import > Existing Android project
-1. Choose the `android/ArtsHack` directory
+1. Choose the `android/ArtsHack/app` directory
 1. Right click on the Project ImageManipulationsActivity > Properties > Android > Add Library... 
 1. Choose the OpenCV Library - 3.0.0
 1. Right click on the Project ImageManipulationsActivity > Run as... > Android Application
