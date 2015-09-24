@@ -22,10 +22,14 @@ function setUpAudio(e){
   analyser = audioContext.createAnalyser();
   audioInput.connect(analyser);
 
+  analyser.minDecibels = -100;
+  analyser.maxDecibels = 0;
+
   analyser.fftSize = 32;
   bufferLength = analyser.frequencyBinCount;
 
   dataArray = new Uint8Array(bufferLength);
+  floatArray = new Float32Array(bufferLength);
   analyser.getByteTimeDomainData(dataArray);
 
   audioAnalyser = new AudioAnalyser();
@@ -38,13 +42,36 @@ function AudioAnalyser(){}
 AudioAnalyser.prototype.getByteFrequencyData = function(){
   if(!isSetup) return null;
 
-  var combined = [];
   analyser.getByteTimeDomainData(dataArray);
-  for(var i = 0; i < dataArray.length; i+=2){
-    combined.push((dataArray[i] + dataArray[i + 1]) / 2);
-  }
-
-  return combined;
+  return mergeNumbers(dataArray);
 };
 
-// module.exports = new AudioAnalyser();
+AudioAnalyser.prototype.getFloatFrequencyData = function(){
+  if(!isSetup) return null;
+
+  analyser.getFloatFrequencyData(floatArray);
+  return mergeNumbers(floatArray);
+};
+
+function mergeNumbers(array){
+  var combined = [];
+  for(var i = 0; i < array.length; i+=2){
+    combined.push((array[i] + array[i + 1]) / 2);
+  }
+  return combined;
+}
+
+AudioAnalyser.prototype.getBass = function(){
+  analyser.getFloatFrequencyData(floatArray);
+  return ((floatArray[0] + floatArray[1] + floatArray[2] + floatArray[3]) / 4) * -0.05;
+};
+
+AudioAnalyser.prototype.getMid = function(){
+  analyser.getFloatFrequencyData(floatArray);
+  return ((floatArray[7] + floatArray[8] + floatArray[9] + floatArray[10]) / 4) * -0.05;
+};
+
+AudioAnalyser.prototype.getHigh = function(){
+  analyser.getFloatFrequencyData(floatArray);
+  return ((floatArray[12] + floatArray[13] + floatArray[14] + floatArray[15]) / 4) * -0.05;
+};

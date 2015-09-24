@@ -61,6 +61,7 @@
 						else ctx.lineTo(pt[0], pt[1]);
 					});
 
+					ctx.lineWidth = audioAnalyser.getMid() + 'px';
 					ctx.stroke();
 				});
 			});
