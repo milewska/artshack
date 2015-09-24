@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title></title>
+
+		<script src="/socket.io/socket.io.js"></script>
+	</head>
+	<body>
+		<canvas id="main-canvas"></canvas>
+		<script>
+		var socket = io.connect(location.origin);
+		var canvas = document.getElementById("main-canvas");
+		var size = { width: 600, height: 600 };
+
+		canvas.width = size.width;
+		canvas.height = size.height;
+
+		socket.on("contour", function(lines) {
+			var ctx = canvas.getContext("2d");
+			ctx.clearRect(0, 0, size.width, size.height);
+
+			lines.forEach(function(points) {
+				points.forEach(function(pt, index) {
+					if (!index) ctx.moveTo(pt[0], pt[1]);
+					else if (pt.length === 6) ctx.bezierCurveTo(pt[0], pt[1], pt[2], pt[3], pt[4], pt[5]);
+					else ctx.lineTo(pt[0], pt[1]);
+				});
+
+				ctx.stroke();
+			});
+		});
+		</script>
+	</body>
+</html>
