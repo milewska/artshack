@@ -1,3 +1,4 @@
+/node_modules
 
 .externalToolBuilders
 .cproject
@@ -54,3 +55,4 @@ lint.xml
 
 
 opencvjava
+/frames

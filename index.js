@@ -1,3 +1,4 @@
+var _ = require("underscore");
 var express = require("express");
 var bodyParser = require("body-parser");
 
@@ -12,11 +13,15 @@ app.get("/", function(req, res, next) {
 	res.sendFile(__dirname + "/index.html");
 });
 
-app.post("/contours", function(req, res, next) {
-	io.emit('contour', req.body);
+var shipFrame = _.throttle(function(data) {
+	io.emit('frame', data);
+}, 1000/30);
+
+app.post("/frame", function(req, res, next) {
+	shipFrame(req.body);
 	res.send({ ok: true });
 });
 
-server.listen(3000, function() {
+server.listen(process.env.PORT || 3000, function() {
 	console.log("ready");
 });
