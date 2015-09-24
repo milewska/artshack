@@ -22,6 +22,9 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.imgproc.Imgproc;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -243,10 +246,7 @@ public class ImageManipulationsActivity extends Activity implements
 			rgbaInnerWindow.release();
 
 			framecount++;
-			if (framecount % 10 == 0) {
-				Intent upload = new Intent(this, UploadIntentService.class);
-				startService(upload);
-			}
+			
 			// http://stackoverflow.com/questions/13134682/convert-mat-to-bitmap-opencv-for-android
 			Bitmap bm = Bitmap.createBitmap(rgba.width(), rgba.height(),
 					Bitmap.Config.ARGB_8888);
@@ -270,6 +270,13 @@ public class ImageManipulationsActivity extends Activity implements
 			// Core.rectangle(m, bounding_rect.br(), bounding_rect.tl(), new
 			// Scalar(0,255,0));
 
+			
+			if (framecount % 10 == 0) {
+				Intent upload = new Intent(this, UploadIntentService.class);
+				upload.putExtra("contours",new Gson().toJson(contours));
+				startService(upload);
+			}
+			
 			Utils.matToBitmap(dst, bm);
 			return rgba;
 		}
