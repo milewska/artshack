@@ -9,38 +9,58 @@
 		<script src="/audio.js"></script>
 		<script src="/FileSaver.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
+
+		<style>
+			canvas {
+				float: left;
+				display: inline-block;
+			}
+		</style>
 	</head>
 	<body>
-		<canvas id="main-canvas"></canvas>
+		<canvas id="canvas1"></canvas>
+		<canvas id="canvas2"></canvas>
+		<canvas id="canvas3"></canvas>
+		<canvas id="canvas4"></canvas>
 		<button onclick="saveImage();">Download Image</button>
 
 		<script>
 		// connect via websockets
 		var socket = io.connect(location.origin);
-		// grab canvas element and set the height
-		var canvas = document.getElementById("main-canvas");
-		var size = { width: 600, height: 600 };
-		canvas.width = size.width;
-		canvas.height = size.height;
 
-		var audioData;
+		// grab canvas element and set the height
+		var canvases = Array.prototype.slice.call(document.getElementsByTagName("canvas"), 0);
+		var bgcolors = [ "#005CC1", "#DF412C", "#F8C932", "#3D823B" ];
+
+		// set canvas size
+		var size = { width: 300, height: 300 };
+		canvases.forEach(function(c) {
+			c.width = size.width;
+			c.height = size.height;
+		});
 
 		// paint when we recieve a frame
 		socket.on("frame", function(lines) {
-			// grab the context
-			var ctx = canvas.getContext("2d");
-			// ctx.clearRect(0, 0, size.width, size.height);
+			// get audio information
+			var audioData = audioAnalyser.getByteFrequencyData();
 
-			audioData = audioAnalyser.getByteFrequencyData();
+			canvases.forEach(function(canvas, i) {
+				// grab the context
+				var ctx = canvas.getContext("2d");
 
-			// write the lines
-			lines.forEach(function(points) {
-				points.forEach(function(pt, index) {
-					if (!index) ctx.moveTo(pt[0], pt[1]);
-					else ctx.lineTo(pt[0], pt[1]);
+				// fill with color
+				ctx.fillStyle = bgcolors[i];
+				ctx.fillRect(0, 0, size.width, size.height);
+
+				// write the lines
+				lines.forEach(function(points) {
+					points.forEach(function(pt, index) {
+						if (!index) ctx.moveTo(pt[0], pt[1]);
+						else ctx.lineTo(pt[0], pt[1]);
+					});
+
+					ctx.stroke();
 				});
-
-				ctx.stroke();
 			});
 		});
 
