@@ -63,15 +63,15 @@ function mergeNumbers(array){
 
 AudioAnalyser.prototype.getBass = function(){
   analyser.getFloatFrequencyData(floatArray);
-  return ((floatArray[0] + floatArray[1] + floatArray[2] + floatArray[3]) / 4) * 0.05;
+  return ((floatArray[0] + floatArray[1] + floatArray[2] + floatArray[3]) / 4) * -0.05;
 };
 
 AudioAnalyser.prototype.getMid = function(){
   analyser.getFloatFrequencyData(floatArray);
-  return ((floatArray[7] + floatArray[8] + floatArray[9] + floatArray[10]) / 4) * 0.05;
+  return ((floatArray[7] + floatArray[8] + floatArray[9] + floatArray[10]) / 4) * -0.05;
 };
 
 AudioAnalyser.prototype.getHigh = function(){
   analyser.getFloatFrequencyData(floatArray);
-  return ((floatArray[12] + floatArray[13] + floatArray[14] + floatArray[15]) / 4) * 0.05;
+  return ((floatArray[12] + floatArray[13] + floatArray[14] + floatArray[15]) / 4) * -0.05;
 };
