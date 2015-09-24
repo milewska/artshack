@@ -24,7 +24,8 @@
 		<canvas id="canvas3"></canvas>
 		<canvas id="canvas4"></canvas>
 		<div style="clear: both"></div>
-		<button onclick="saveImage();">Download Image</button>
+
+		<!-- <button onclick="saveImage();">Download Image</button> -->
 
 		<script>
 		// connect via websockets
@@ -67,19 +68,19 @@
 			});
 		});
 
-		// downloads the canvas as a pngs
-		function saveImage() {
-			var element = document.createElement('a');
-			element.setAttribute('href', canvas.toDataURL("image/png"));
-			element.setAttribute('download', "image.png");
-
-			element.style.display = 'none';
-			document.body.appendChild(element);
-
-			element.click();
-
-			document.body.removeChild(element);
-		}
+		// // downloads the canvas as a pngs
+		// function saveImage() {
+		// 	var element = document.createElement('a');
+		// 	element.setAttribute('href', canvases[0].toDataURL("image/png"));
+		// 	element.setAttribute('download', "image.png");
+		//
+		// 	element.style.display = 'none';
+		// 	document.body.appendChild(element);
+		//
+		// 	element.click();
+		//
+		// 	document.body.removeChild(element);
+		// }
 		</script>
 	</body>
 </html>
