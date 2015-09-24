@@ -37,8 +37,14 @@ function AudioAnalyser(){}
 
 AudioAnalyser.prototype.getByteFrequencyData = function(){
   if(!isSetup) return null;
+
+  var combined = [];
   analyser.getByteTimeDomainData(dataArray);
-  return dataArray;
+  for(var i = 0; i < dataArray.length; i+=2){
+    combined.push((dataArray[i] + dataArray[i + 1]) / 2);
+  }
+
+  return combined;
 };
 
 // module.exports = new AudioAnalyser();
