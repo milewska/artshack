@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title></title>
 
+		<script src="/audio.js"></script>
 		<script src="/FileSaver.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 	</head>
@@ -16,18 +17,21 @@
 		<script>
 		// connect via websockets
 		var socket = io.connect(location.origin);
-
 		// grab canvas element and set the height
 		var canvas = document.getElementById("main-canvas");
 		var size = { width: 600, height: 600 };
 		canvas.width = size.width;
 		canvas.height = size.height;
 
+		var audioData;
+
 		// paint when we recieve a frame
 		socket.on("frame", function(lines) {
 			// clear the canvas
 			var ctx = canvas.getContext("2d");
 			ctx.clearRect(0, 0, size.width, size.height);
+
+			audioData = audioAnalyser.getByteFrequencyData();
 
 			// write the lines
 			lines.forEach(function(points) {
