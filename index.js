@@ -1,3 +1,4 @@
+var _ = require("underscore");
 var express = require("express");
 var bodyParser = require("body-parser");
 var level = require('level');
@@ -14,8 +15,12 @@ app.get("/", function(req, res, next) {
 	res.sendFile(__dirname + "/index.html");
 });
 
+var shipFrame = _.throttle(function(data) {
+	io.emit('frame', data);
+}, 1000/30);
+
 app.post("/frame", function(req, res, next) {
-	io.emit('frame', req.body);
+	shipFrame(req.body);
 	res.send({ ok: true });
 });
 
