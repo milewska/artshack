@@ -25,9 +25,9 @@
 
 		// paint when we recieve a frame
 		socket.on("frame", function(lines) {
-			// clear the canvas
+			// grab the context
 			var ctx = canvas.getContext("2d");
-			ctx.clearRect(0, 0, size.width, size.height);
+			// ctx.clearRect(0, 0, size.width, size.height);
 
 			// write the lines
 			lines.forEach(function(points) {
