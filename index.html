@@ -23,7 +23,7 @@
 		canvas.width = size.width;
 		canvas.height = size.height;
 
-		var audioData;
+		var bass, mid, high;
 
 		// paint when we recieve a frame
 		socket.on("frame", function(lines) {
@@ -31,7 +31,8 @@
 			var ctx = canvas.getContext("2d");
 			// ctx.clearRect(0, 0, size.width, size.height);
 
-			audioData = audioAnalyser.getByteFrequencyData();
+			audioData = audioAnalyser.getBass();
+
 
 			// write the lines
 			lines.forEach(function(points) {
@@ -40,6 +41,7 @@
 					else ctx.lineTo(pt[0], pt[1]);
 				});
 
+				// ctx.lineWidth = 
 				ctx.stroke();
 			});
 		});
