@@ -51,5 +51,8 @@ Thumbs.db
 lint.xml
 
 *.iml
-idea/
+.idea/
+
+
+opencvjava
 /frames
