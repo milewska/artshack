@@ -6,10 +6,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title></title>
 
+		<script src="/FileSaver.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 	</head>
 	<body>
 		<canvas id="main-canvas"></canvas>
+		<button onclick="saveImage();">Download Image</button>
+
 		<script>
 		// connect via websockets
 		var socket = io.connect(location.origin);
@@ -36,6 +39,20 @@
 				ctx.stroke();
 			});
 		});
+
+		// downloads the canvas as a pngs
+		function saveImage() {
+			var element = document.createElement('a');
+			element.setAttribute('href', canvas.toDataURL("image/png"));
+			element.setAttribute('download', "image.png");
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+		}
 		</script>
 	</body>
 </html>
