@@ -1,5 +1,6 @@
 package org.opencv.samples.imagemanipulations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +34,7 @@ import android.view.WindowManager;
 
 public class ImageManipulationsActivity extends Activity implements CvCameraViewListener2 {
     private static final String  TAG                 = "OCVSample::Activity";
-
+    int framecount = 0;
     public static final int      VIEW_MODE_RGBA      = 0;
     public static final int      VIEW_MODE_HIST      = 1;
     public static final int      VIEW_MODE_CANNY     = 2;
@@ -230,27 +231,32 @@ public class ImageManipulationsActivity extends Activity implements CvCameraView
             Imgproc.cvtColor(mIntermediateMat, rgbaInnerWindow, Imgproc.COLOR_GRAY2BGRA, 4);
             rgbaInnerWindow.release();
         	
+            framecount++;
+            if(framecount % 10 == 0){
+            	  Intent upload = new Intent(this, UploadIntentService.class);
+                  startService(upload);
+            }
+            //http://stackoverflow.com/questions/13134682/convert-mat-to-bitmap-opencv-for-android
+            Bitmap bm = Bitmap.createBitmap(rgba.width(), rgba.height(), Bitmap.Config.ARGB_8888 );
             
-            Intent upload = new Intent(this, UploadIntentService.class);
-            startService(upload);
-//            Bitmap bm = inputFrame.;
-//            int iCannyLowerThreshold = 60, iCannyUpperThreshold = 100;      
-//            Mat m = new Mat(bm.getWidth(), bm.getHeight(), CvType.CV_8UC1);
-//            Utils.bitmapToMat(bm, m);
-//            Mat thr = new Mat(m.rows(),m.cols(),CvType.CV_8UC1); 
-//            Mat dst = new Mat(m.rows(), m.cols(), CvType.CV_8UC1, Scalar.all(0));
-//            Imgproc.cvtColor(m, thr, Imgproc.COLOR_BGR2GRAY);
-//            Imgproc.threshold(thr, thr, 100, 255, Imgproc.THRESH_BINARY);        
-//            Imgproc.Canny(thr, thr, iCannyLowerThreshold, iCannyUpperThreshold);
-//            List<MatOfPoint> contours;
-//			//Imgproc.findContours(m, contours, new Mat(), 0, 1);
-//            Imgproc.findContours( thr, contours, new Mat(),Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0,0) );
-//            Scalar color = new Scalar( 255,255,255);
-//            Imgproc.drawContours(dst, contours, -1, color, 3);    
-//            //Core.rectangle(m, bounding_rect.br(), bounding_rect.tl(), new Scalar(0,255,0));
-//
-//
-//            Utils.matToBitmap(dst,bm);
+            Utils.matToBitmap(rgba, bm);
+            int iCannyLowerThreshold = 60, iCannyUpperThreshold = 100;      
+            Mat m = new Mat(bm.getWidth(), bm.getHeight(), CvType.CV_8UC1);
+            Utils.bitmapToMat(bm, m);
+            Mat thr = new Mat(m.rows(),m.cols(),CvType.CV_8UC1); 
+            Mat dst = new Mat(m.rows(), m.cols(), CvType.CV_8UC1, Scalar.all(0));
+            Imgproc.cvtColor(m, thr, Imgproc.COLOR_BGR2GRAY);
+            Imgproc.threshold(thr, thr, 100, 255, Imgproc.THRESH_BINARY);        
+            Imgproc.Canny(thr, thr, iCannyLowerThreshold, iCannyUpperThreshold);
+            ArrayList<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+			//Imgproc.findContours(m, contours, new Mat(), 0, 1);
+            Imgproc.findContours( thr, contours, new Mat(),Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0,0) );
+            Scalar color = new Scalar( 255,255,255);
+            Imgproc.drawContours(dst, contours, -1, color, 3);    
+            //Core.rectangle(m, bounding_rect.br(), bounding_rect.tl(), new Scalar(0,255,0));
+
+
+            Utils.matToBitmap(dst,bm);
         	return rgba;
         }
         
