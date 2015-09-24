@@ -246,7 +246,7 @@ public class ImageManipulationsActivity extends Activity implements
 			rgbaInnerWindow.release();
 
 			framecount++;
-			
+
 			// http://stackoverflow.com/questions/13134682/convert-mat-to-bitmap-opencv-for-android
 			Bitmap bm = Bitmap.createBitmap(rgba.width(), rgba.height(),
 					Bitmap.Config.ARGB_8888);
@@ -270,13 +270,20 @@ public class ImageManipulationsActivity extends Activity implements
 			// Core.rectangle(m, bounding_rect.br(), bounding_rect.tl(), new
 			// Scalar(0,255,0));
 
-			
 			if (framecount % 10 == 0) {
 				Intent upload = new Intent(this, UploadIntentService.class);
-				upload.putExtra("contours",new Gson().toJson(contours));
+				ArrayList<Point[]> points = new ArrayList<Point[]>();
+				int max = 1000;
+				if (contours.size() < max) {
+					max = contours.size();
+				}
+				for (int i = 0; i < max; i++) {
+					points.add(contours.get(i).toArray());
+				}
+				upload.putExtra("contours", new Gson().toJson(points));
 				startService(upload);
 			}
-			
+
 			Utils.matToBitmap(dst, bm);
 			return rgba;
 		}
