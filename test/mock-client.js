@@ -3,7 +3,7 @@ var request = require("request");
 var Promise = require("bluebird");
 
 var newRandomPoint = function(width, height) {
-	console.log(" newRandomPoint", width, height);
+	// console.log(" newRandomPoint", width, height);
 	return {
 		x: Math.round(Math.random() * width),
 		y: Math.round(Math.random() * height)
@@ -11,7 +11,7 @@ var newRandomPoint = function(width, height) {
 };
 
 var changePointByDelta = function(point, delta) {
-	console.log(" changePointByDelta", point, delta);
+	// console.log(" changePointByDelta", point, delta);
 	delta = delta || 10;
 	return {
 		x: Math.round(point.x + Math.random() * delta),
@@ -21,7 +21,7 @@ var changePointByDelta = function(point, delta) {
 
 var growOrShrinkVectors = function(vectors, newItem) {
 	if (Math.random() > 0.5) {
-		console.log(" growing from " + vectors.length);
+		// console.log(" growing from " + vectors.length);
 		if (Math.random() > 0.5) {
 			vectors.unshift(newItem);
 		} else {
@@ -29,7 +29,7 @@ var growOrShrinkVectors = function(vectors, newItem) {
 		}
 	} else {
 		if (vectors.length) {
-			console.log(" shrinking from " + vectors.length);
+			// console.log(" shrinking from " + vectors.length);
 			if (Math.random() > 0.5) {
 				// Remove one from this vector or one of its children
 				if (vectors[0].length) {
@@ -49,7 +49,7 @@ var growOrShrinkVectors = function(vectors, newItem) {
 };
 
 var MockClient = function(options) {
-	console.log("Constructing a mock client ", options);
+	// console.log("Constructing a mock client ", options);
 	if (!options) {
 		options = {
 			width: 1096,
@@ -61,25 +61,29 @@ var MockClient = function(options) {
 	}
 
 	return {
+		clientId: Date.now(),
 		width: options.width || 1000,
 		height: options.height || 600,
 		timeout: 5000,
 		stop: false,
 		debug: function() {
-			console.log.apply(this, arguments);
+			// console.log.apply(this, arguments);
 		},
 		sendData: function(data) {
 			var self = this;
 			if (!data) {
 				data = this.generateDataFromSeed();
 			}
+			// console.log("sending data", data);
 			return new Promise(function(resolve, reject) {
 				request({
 					method: "POST",
 					url: "http://localhost:3000/frame",
-					data: data
-				}, function(error, sessionresponse, body) {
-					console.log(error, body);
+					data: {
+						clientId: self.clientId,
+						lines: data
+					}
+				}, function(error, response, body) {
 					if (error) {
 						reject(error);
 					} else {

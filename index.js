@@ -19,8 +19,12 @@ var shipFrame = _.throttle(function(data) {
 }, 1000/30);
 
 app.post("/frame", function(req, res) {
-	shipFrame(req.body);
-	res.send({ ok: true });
+	if (req.body && req.body.lines && req.body.lines.length) {
+		shipFrame(req.body.lines);
+		res.send({ ok: true });
+	} else {
+		res.send({ missing: "lines were not provided." });
+	}
 });
 
 server.listen(process.env.PORT || 3000, function() {
