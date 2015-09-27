@@ -1,5 +1,6 @@
 "use strict";
 var request = require("request");
+var Promise = require("bluebird");
 
 var newRandomPoint = function(width, height) {
 	console.log(" newRandomPoint", width, height);
@@ -67,23 +68,34 @@ var MockClient = function(options) {
 		debug: function() {
 			console.log.apply(this, arguments);
 		},
-		mockDataAndLoop: function(seed) {
+		sendData: function(data) {
 			var self = this;
-			request({
-				method: "POST",
-				url: "http://localhost:3000/frame",
-				data: seed
-			}, function(sessionerror, sessionresponse, sessionbody) {
-				console.log(sessionerror, sessionbody);
-
-				setTimeout(function() {
-					if (!self.stop) {
-						self.mockDataAndLoop(seed);
+			if (!data) {
+				data = this.generateDataFromSeed();
+			}
+			return new Promise(function(resolve, reject) {
+				request({
+					method: "POST",
+					url: "http://localhost:3000/frame",
+					data: data
+				}, function(error, sessionresponse, body) {
+					console.log(error, body);
+					if (error) {
+						reject(error);
+					} else {
+						resolve(body);
 					}
-				}, self.timeout);
+					setTimeout(function() {
+						if (self.stop) {
+							self = null;
+							return;
+						}
+						self.sendData(self.generateDataFromSeed(data));
+					}, self.timeout);
+				});
 			});
 		},
-		generateData: function(vectors) {
+		generateDataFromSeed: function(vectors) {
 			var self = this;
 			if (!vectors) {
 				vectors = this.generateSeed();

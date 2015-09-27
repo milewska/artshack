@@ -8,12 +8,27 @@ describe(" mock client", function() {
 	});
 
 	describe(" mock send edges in a frame", function() {
-
-
+		it("should have a sendData function", function(done) {
+			var client = new MockClient();
+			client.sendData().then(function(response) {
+				console.log(" send data response", response);
+				expect(response).toBeDefined();
+				expect(JSON.parse(response).ok).toBeTruthy();
+				client.stop = true;
+			}, function(reason) {
+				expect(reason.code).toEqual("ECONNREFUSED");
+				expect(reason.message).toEqual("maybe you didnt turn on the server?");
+				client.stop = true;
+			}).catch(function(exception) {
+				console.log(exception.stack);
+				expect(exception).toEqual("should not throw an exception");
+				client.stop = true;
+			}).done(done);
+		}, 2000);
 	});
 
 
-	describe("generate fake data", function() {
+	xdescribe("generate fake data", function() {
 
 		it("should have a seed generator", function() {
 			var client = new MockClient();
@@ -21,7 +36,7 @@ describe(" mock client", function() {
 		});
 		it("should have a delta generator", function() {
 			var client = new MockClient();
-			expect(client.generateData).toBeDefined();
+			expect(client.generateDataFromSeed).toBeDefined();
 		});
 
 		it("should generator a seed set of data", function() {
@@ -47,7 +62,7 @@ describe(" mock client", function() {
 				vectorCount: 5,
 				vectorMeanLength: 10,
 				curve: -3
-			}).generateData();
+			}).generateDataFromSeed();
 
 			expect(data.length >= 4 && data.length <= 6).toBeTruthy();
 			data.map(function(vector) {
@@ -82,7 +97,7 @@ describe(" mock client", function() {
 					"y": 718.0
 				}]
 			];
-			var nextFrame = new MockClient().generateData(currentFrame);
+			var nextFrame = new MockClient().generateDataFromSeed(currentFrame);
 
 			console.log(nextFrame);
 			expect(nextFrame.length >= 2 && nextFrame.length <= 4).toBeTruthy();
