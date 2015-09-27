@@ -11,13 +11,17 @@ describe(" mock client", function() {
 		it("should have a sendData function", function(done) {
 			var client = new MockClient();
 			client.sendData().then(function(response) {
-				console.log(" send data response", response);
+				console.log("  response ", response);
 				expect(response).toBeDefined();
 				expect(JSON.parse(response).ok).toBeTruthy();
 				client.stop = true;
 			}, function(reason) {
-				expect(reason.code).toEqual("ECONNREFUSED");
-				expect(reason.message).toEqual("maybe you didnt turn on the server?");
+				if (reason.code) {
+					expect(reason.code).toEqual("ECONNREFUSED");
+					expect(reason.message).toEqual("maybe you didnt turn on the server?");
+				} else {
+					expect(reason.error).toEqual("lines were not provided.");
+				}
 				client.stop = true;
 			}).catch(function(exception) {
 				console.log(exception.stack);

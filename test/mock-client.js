@@ -84,9 +84,18 @@ var MockClient = function(options) {
 						lines: data
 					}
 				}, function(error, response, body) {
+					console.log(error, resolve, body);
 					if (error) {
 						reject(error);
 					} else {
+						if (body) {
+							try {
+								body = JSON.parse(body);
+							} catch (e) {}
+						}
+						if (body.error) {
+							reject(body);
+						}
 						resolve(body);
 					}
 					setTimeout(function() {

@@ -27,8 +27,9 @@ app.post("/frame", function(req, res) {
 			ok: true
 		});
 	} else {
+		res.status(400);
 		res.send({
-			missing: "lines were not provided."
+			error: "lines were not provided."
 		});
 	}
 });
