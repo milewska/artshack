@@ -33,10 +33,13 @@
 
 		// grab canvas element and set the height
 		var canvases = Array.prototype.slice.call(document.getElementsByTagName("canvas"), 0);
-		var bgcolors = [ "#005CC1", "#DF412C", "#F8C932", "#3D823B" ];
+		var bgcolors = ["#005CC1", "#DF412C", "#F8C932", "#3D823B"];
 
 		// set canvas size
-		var size = { width: 300, height: 300 };
+		var size = {
+			width: 300,
+			height: 300
+		};
 		canvases.forEach(function(c) {
 			c.width = size.width;
 			c.height = size.height;
