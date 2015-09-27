@@ -44,10 +44,18 @@
 
 		// paint when we recieve a frame
 		socket.on("frame", function(lines) {
+			if (!lines || !lines.length || typeof lines.forEach !== "function") {
+				console.log("Invalid list of lines sent from the server.", lines);
+				return;
+			}
 			console.log(lines);
 
 			// get audio information
-			var audioData = audioAnalyser.getByteFrequencyData();
+			var audioData;
+			if (audioAnalyser && typeof audioAnalyser.getByteFrequencyData === "function") {
+				// audioData = audioAnalyser.getByteFrequencyData();
+				audioData = audioAnalyser.getMid();
+			}
 
 			canvases.forEach(function(canvas, i) {
 				// grab the context
@@ -64,7 +72,7 @@
 						else ctx.lineTo(pt.x, pt.y);
 					});
 
-					ctx.lineWidth = (Math.floor(audioAnalyser.getMid() * 5) + 1) + 'px';
+					ctx.lineWidth = (Math.floor(audioData * 5) + 1) + 'px';
 					ctx.stroke();
 				});
 			});
