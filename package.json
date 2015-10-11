@@ -13,5 +13,8 @@
   "engines": {
     "node": "0.12.x",
     "npm": "2.x"
+  },
+  "devDependencies": {
+    "request": "^2.64.0"
   }
 }

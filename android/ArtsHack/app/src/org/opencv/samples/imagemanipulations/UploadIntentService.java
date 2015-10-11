@@ -55,8 +55,8 @@ public class UploadIntentService extends IntentService{
 	      printout = new DataOutputStream(urlConnection.getOutputStream());
 	      String jsonString = intent.getStringExtra("contours");
 	      Log.d("Upload", jsonString);
-//	      printout.write("{\"contours\": []}".getBytes());
-	      printout.write(jsonString.getBytes());
+	      jsonString = "{\"clientId\":  \"00000000\", \"lines\": " + jsonString + "}";
+		  printout.write(jsonString.getBytes());
 	      printout.flush();
 	      printout.close();
 	    } catch (IOException e) {
