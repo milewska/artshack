@@ -61,7 +61,7 @@ var MockClient = function(options) {
 	}
 
 	return {
-		clientId: Date.now(),
+		clientId: "mockClient" + Date.now(),
 		width: options.width || 1000,
 		height: options.height || 600,
 		timeout: 5000,
@@ -84,7 +84,7 @@ var MockClient = function(options) {
 						lines: data
 					}
 				}, function(error, response, body) {
-					console.log(error, resolve, body);
+					// console.log(error, resolve, body);
 					if (error) {
 						reject(error);
 					} else {

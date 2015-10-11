@@ -6,6 +6,8 @@ var app = express();
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
 
+var MockClient = require("./test/mock-client");
+var mockClientUntilARealOneConnects;
 
 app.use(bodyParser.json({
 	limit: "5000kb"
@@ -22,6 +24,11 @@ var shipFrame = _.throttle(function(data) {
 
 app.post("/frame", function(req, res) {
 	if (req.body && req.body.lines && req.body.lines.length) {
+		// Turn off mock client if a real one connected.
+		if (req.body.clientId && typeof req.body.clientId.indexOf === "function" && req.body.clientId.indexOf("mockClient") !== 0) {
+			mockClientUntilARealOneConnects.stop = true;
+		}
+		console.log("Sent frame with " + req.body.lines.length + " vectors");
 		shipFrame(req.body.lines);
 		res.send({
 			ok: true
@@ -37,3 +44,9 @@ app.post("/frame", function(req, res) {
 server.listen(process.env.PORT || 3000, function() {
 	console.log("ready");
 });
+
+
+setTimeout(function() {
+	mockClientUntilARealOneConnects = new MockClient();
+	mockClientUntilARealOneConnects.sendData();
+}, 1000);
