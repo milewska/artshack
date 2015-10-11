@@ -79,7 +79,7 @@ var MockClient = function(options) {
 				request({
 					method: "POST",
 					url: "http://localhost:3000/frame",
-					data: {
+					json: {
 						clientId: self.clientId,
 						lines: data
 					}
